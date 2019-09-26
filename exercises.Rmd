@@ -1,0 +1,48 @@
+---
+title: "Functional programming"
+output: html_document
+---
+
+```{r setup}
+library(tidyverse)
+library(gapminder)
+set.seed(1234)
+x_list <- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
+```
+
+## Your Turn 1
+
+1. Read the code in the first chunk and predict what will happen.
+2. Run the code in the first chunk. What does it return?
+
+```{r}
+list(
+  sum_a = sum(x_list$a),
+  sum_b = sum(x_list$b),
+  sum_c = sum(x_list$c)
+)
+```
+
+3. Now, use `map()` to create the same output.
+
+```{r}
+map(number_list, ___)
+```
+
+## Your Turn 2
+
+Pass diabetes to `map()` and map using `class()`. What are these results telling you?
+
+```{r}
+map(_____, ______)
+```
+
+## Show of Hands
+
+Which of these will throw an error?
+
+```{r}
+map(gapminder, class)
+map_int(gapminder, class)
+map_chr(gapminder, class)
+```

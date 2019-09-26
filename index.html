@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Functional programming and iteration with purrr</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Malcolm Barrett" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Functional programming and iteration with purrr
+### Malcolm Barrett
+
+---
+
+
+
+
+background-image: url(http://hexb.in/hexagons/purrr.png)
+background-position: 90% 26%
+
+# purrr: A functional programming toolkit for R 
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+## Complete and consistent set of tools for working with functions and vectors
+
+---
+class: inverse, middle
+
+# Problems we want to solve:
+1. Making code clear
+2. Making code safe
+3. Working with lists and data frames
+
+---
+
+background-image: url(http://hexb.in/hexagons/purrr.png)
+background-position: 95% 2%
+
+# map(.x, .f)
+
+--
+
+## .x: a vector, list, or data frame
+
+--
+
+## .f: a function
+
+--
+
+## Returns a list
+
+---
+
+
+
+# Using map()
+
+
+```r
+library(purrr)
+x_list &lt;- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
+
+map(x_list, mean)
+```
+
+---
+
+
+
+# Using map()
+
+
+```r
+library(purrr)
+*x_list &lt;- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
+
+map(x_list, mean)
+```
+
+
+---
+
+
+
+# Using map()
+
+
+```r
+library(purrr)
+x_list &lt;- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
+
+*map(x_list, mean)
+```
+
+
+---
+
+
+
+# Using map()
+
+
+```r
+library(purrr)
+x_list &lt;- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
+
+map(x_list, mean)
+```
+
+```
+## $x
+## [1] -0.3831574
+## 
+## $y
+## [1] -0.1181707
+## 
+## $z
+## [1] -0.3879468
+```
+
+---
+
+&lt;img src="img/purrr_list.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="img/purrr_f_list.png" width="912" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="img/purr_x_input.png" width="901" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Your Turn 1
+
+### Read the code in the first chunk and predict what will happen.
+### Run the code in the first chunk. What does it return?
+
+
+```r
+list(
+  sum_a = sum(x_list$a),
+  sum_b = sum(x_list$b),
+  sum_c = sum(x_list$c)
+)
+```
+
+### Now, use `map()` to create the same output.
+
+---
+
+## Your Turn 1
+
+
+```r
+map(x_list, sum)
+```
+
+```
+## $x
+## [1] -3.831574
+## 
+## $y
+## [1] -1.181707
+## 
+## $z
+## [1] -3.879468
+```
+
+---
+
+## using `map()` with data frames
+
+--
+
+
+```r
+library(gapminder)
+gapminder %&gt;% 
+  dplyr::select_if(is.numeric) %&gt;% 
+  map(sd)
+```
+
+---
+
+## using `map()` with data frames
+
+
+```r
+library(gapminder)
+*gapminder %&gt;%
+* dplyr::select_if(is.numeric) %&gt;%
+  map(sd)
+```
+
+---
+
+
+
+## using `map()` with data frames
+
+
+```r
+library(gapminder)
+gapminder %&gt;% 
+  dplyr::select_if(is.numeric) %&gt;% 
+* map(sd)
+```
+
+---
+
+## using `map()` with data frames
+
+
+```r
+library(gapminder)
+gapminder %&gt;% 
+  dplyr::select_if(is.numeric) %&gt;% 
+  map(sd)
+```
+
+```
+## $year
+## [1] 17.26533
+## 
+## $lifeExp
+## [1] 12.91711
+## 
+## $pop
+## [1] 106157897
+## 
+## $gdpPercap
+## [1] 9857.455
+```
+
+---
+
+## Your Turn 2
+
+### Pass gapminder to `map()` and map using `class()`. What are these results telling you?
+
+
+```r
+map(_____, ______)
+```
+
+---
+
+## Your Turn 2
+
+
+```r
+map(gapminder, class)
+```
+
+.pull-left[
+
+```
+## $country
+## [1] "factor"
+## 
+## $continent
+## [1] "factor"
+## 
+## $year
+## [1] "integer"
+```
+]
+
+.pull-right[
+
+```
+## $lifeExp
+## [1] "numeric"
+## 
+## $pop
+## [1] "integer"
+## 
+## $gdpPercap
+## [1] "numeric"
+```
+]
+
+---
+
+class: inverse
+# Three ways to pass functions to `map()`
+1. pass directly to `map()`
+2. use an anonymous function
+3. use ~
+
+---
+
+&lt;img src="img/purr_f_input1.png" width="904" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="img/purr_f_input2.png" width="968" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="img/purr_f_input3.png" width="839" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Annonymous functions
+
+
+
+```r
+map(gapminder, ~length(unique(.x)))
+```
+
+---
+
+## Annonymous functions
+
+
+
+
+```
+## $country
+## [1] 142
+## 
+## $continent
+## [1] 5
+## 
+## $year
+## [1] 12
+## 
+## $lifeExp
+## [1] 1626
+## 
+## $pop
+## [1] 1704
+## 
+## $gdpPercap
+## [1] 1704
+```
+
+---
+
+# Returning types
+
+|  map |  returns |
+|:--|:--|
+|`map()` | list |
+|`map_chr()` | character vector |
+|`map_dbl()` | double vector (numeric) |
+|`map_int()` | integer vector |
+|`map_lgl()` | logical vector |
+|`map_dfc()` | data frame (by column) |
+|`map_dfr()` | data frame (by row) |
+
+---
+
+
+# Returning types
+
+
+```r
+map_int(gapminder, ~length(unique(.x)))
+```
+
+---
+
+# Returning types
+
+
+```r
+map_int(gapminder, ~length(unique(.x)))
+```
+
+```
+##   country continent      year   lifeExp       pop gdpPercap 
+##       142         5        12      1626      1704      1704
+```
+
+---
+
+## Your Turn 3
+
+### Which of these will throw an error?
+
+
+```r
+map(gapminder, class)
+map_int(gapminder, class)
+map_chr(gapminder, class)
+```
+
+---
+
+## Your Turn 3
+
+### Which of these will throw an error?
+
+
+```r
+map_int(gapminder, class)
+```
+
+```
+## Error: Can't coerce element 1 from a character to a integer
+```
+
+---
+
+## Your Turn 3
+
+### Which of these will throw an error?
+
+
+```r
+map_chr(gapminder, class)
+```
+
+```
+##   country continent      year   lifeExp       pop gdpPercap 
+##  "factor"  "factor" "integer" "numeric" "integer" "numeric"
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
