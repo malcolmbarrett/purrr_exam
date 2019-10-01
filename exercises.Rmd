@@ -17,16 +17,16 @@ x_list <- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
 
 ```{r}
 list(
-  sum_a = sum(x_list$a),
-  sum_b = sum(x_list$b),
-  sum_c = sum(x_list$c)
+  x = sum(x_list$x),
+  y = sum(x_list$y),
+  z = sum(x_list$z)
 )
 ```
 
 3. Now, use `map()` to create the same output.
 
 ```{r}
-map(number_list, ___)
+map(x_list, ___)
 ```
 
 ## Your Turn 2
